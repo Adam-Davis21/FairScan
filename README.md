@@ -49,26 +49,35 @@ a single row of data.
 The primary fairness metric, codified by the U.S. Equal Employment Opportunity Commission
 as the **Four-Fifths (80%) Rule**:
 
-$$\text{DI Ratio} = \frac{\text{Success Rate}_{\,\text{protected}}}{\text{Success Rate}_{\,\text{reference}}}$$
+```
+DI Ratio = Success Rate (protected group) / Success Rate (reference group)
+```
 
 A ratio below **0.80** indicates potential adverse impact against the protected group.
 A ratio above **1.25** indicates potential reverse bias.
 
 ### Weighted Audit (when `sample_weight` is present)
 
-$$\text{Success Rate} = \frac{\displaystyle\sum_{i} \left( y_i \times w_i \right)}{\displaystyle\sum_{i} w_i}$$
+```
+Success Rate = sum(outcome × weight) / sum(weight)
+```
 
-where $y_i \in \{0, 1\}$ is the binary outcome and $w_i$ is the sample weight for row $i$.
+where `outcome` is the binary target value (0 or 1) and `weight` is the `sample_weight`
+for each row. Rows with higher weights contribute proportionally more to the group rate.
 
 ### Target-Aware Reweighing
 
-For a user-specified target ratio $T$, FairScan computes:
+For a user-specified target ratio `T`, FairScan computes the following weights for the
+protected group (reference group weights are always fixed at 1.0):
 
-$$w^{+}_{\text{prot}} = \frac{T \cdot p_{\text{ref}}}{p_{\text{prot}}}, \qquad w^{-}_{\text{prot}} = \frac{1 - T \cdot p_{\text{ref}}}{1 - p_{\text{prot}}}$$
+```
+w_prot_positive = (T × p_ref) / p_prot
+w_prot_negative = (1 - T × p_ref) / (1 - p_prot)
+```
 
-where $p_{\text{prot}}$ and $p_{\text{ref}}$ are the unweighted success rates of the protected
-and reference groups respectively. This guarantees that re-auditing the exported CSV
-returns a DI Ratio of exactly $T$.
+where `p_prot` and `p_ref` are the **unweighted** success rates of the protected and
+reference groups respectively. This guarantees that re-auditing the exported CSV with
+these weights returns a DI Ratio of exactly `T`.
 
 ---
 

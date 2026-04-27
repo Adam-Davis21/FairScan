@@ -1,4 +1,14 @@
-pandas
-streamlit
-scikit-learn
-matplotlib
+# FairScan — Python dependencies for Google Cloud Run
+# Generated: 2026-04-27
+# All packages are cross-platform (Linux-compatible) and pinned to stable releases.
+
+# ── Core UI ────────────────────────────────────────────────────────────────────
+streamlit==1.35.0
+
+# ── Data & ML ──────────────────────────────────────────────────────────────────
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.4.2
+
+# ── Visualisation ──────────────────────────────────────────────────────────────
+matplotlib==3.8.4
